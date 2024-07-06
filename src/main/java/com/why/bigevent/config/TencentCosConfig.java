@@ -1,5 +1,8 @@
 package com.why.bigevent.config;
 
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,8 +17,18 @@ public class TencentCosConfig {
 
     @Bean
     COSClient tencentCosClient() {
-        String secretId = "AKIDlMlvrZN4WpBPI3ZtyufIix1Wu4zfGNLB";
-        String secretKey = "lKgsreG0d6RpkV3MVPTNApJcibMzXyIV";
+        System.out.println("WHY");
+        Properties prop = new Properties();
+        try (InputStream input = TencentCosConfig.class.getClassLoader().getResourceAsStream("secret.properties")) {
+            if (input == null) {
+                System.out.println("Sorry, unable to find secret.properties");
+            }
+            prop.load(input);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        String secretId = prop.getProperty("secret.id");
+        String secretKey = prop.getProperty("secret.key");
         Region region = new Region("ap-beijing");
 
         COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
