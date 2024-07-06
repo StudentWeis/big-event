@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.why.bigevent.mapper.ArticleMapper">
+    <select id="list" resultType="com.why.bigevent.pojo.Article"> 
+        select * from article 
+        <where>
+            <if test="categoryId!= null"> category_id = #{categoryId} </if>
+            <if test="state!= null"> AND state = #{state} </if>
+            <if test="userId!= null"> AND create_user = #{userId} </if>
+        </where>
+    </select>
+</mapper>
