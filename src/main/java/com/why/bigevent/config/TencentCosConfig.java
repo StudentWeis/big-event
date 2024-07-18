@@ -17,7 +17,6 @@ public class TencentCosConfig {
 
     @Bean
     COSClient tencentCosClient() {
-        System.out.println("WHY");
         Properties prop = new Properties();
         try (InputStream input = TencentCosConfig.class.getClassLoader().getResourceAsStream("secret.properties")) {
             if (input == null) {

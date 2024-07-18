@@ -23,8 +23,10 @@ import com.why.bigevent.utils.JwtUtil;
 import com.why.bigevent.utils.Md5Util;
 import com.why.bigevent.utils.ThreadLocalUtil;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Pattern;
 
+@Tag(name = "用户相关接口")
 @RestController
 @RequestMapping("/user")
 @Validated
