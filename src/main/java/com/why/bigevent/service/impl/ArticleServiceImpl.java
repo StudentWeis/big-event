@@ -1,8 +1,10 @@
 package com.why.bigevent.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,17 +17,27 @@ import com.why.bigevent.service.ArticleService;
 import com.why.bigevent.utils.ThreadLocalUtil;
 
 @Service
-public class ArticleServiceImpl implements ArticleService{
+public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private ArticleMapper articleMapper;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Override
     public void add(Article article) {
         Map<String, Object> claims = ThreadLocalUtil.get();
         Integer id = (Integer) claims.get("id");
         article.setId(id);
+        article.setState("草稿");
         articleMapper.add(article);
+        System.out.println("DAO 完毕" + LocalDateTime.now());
+
+        // 发送消息到队列进行文本审核
+        String queueName = "hello.queue2";
+        rabbitTemplate.convertAndSend(queueName, article.getContent());
+        System.out.println("Service 完毕" + LocalDateTime.now());
     }
 
     @Override
